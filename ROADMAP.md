@@ -26,17 +26,17 @@ Legend: `[ ]` todo
 
 Reference: PDF "Microservice ProductService".
 
-- [ ] Generate `product-service` with: Web, Data JPA, H2, Actuator,
+- [x] Generate `product-service` with: Web, Data JPA, H2, Actuator,
       Eureka Discovery Client, Config Client
-- [ ] `Product` entity (`id`, `name`) - **`jakarta.persistence`**, not `javax`
-- [ ] `ProductRepository extends JpaRepository<Product, Integer>`
-- [ ] `DummyDataCLR` `CommandLineRunner` seeding Pencil / Book / Eraser
-- [ ] `ProductRestService` with the 5 classic operations:
+- [x] `Product` entity (`id`, `name`) - **`jakarta.persistence`**, not `javax`
+- [x] `ProductRepository extends JpaRepository<Product, Integer>`
+- [x] `DummyDataCLR` `CommandLineRunner` seeding Pencil / Book / Eraser
+- [x] `ProductRestService` with the 5 classic operations:
       `GET /produits`, `GET /produits/{id}`, `POST /produits`,
       `PUT /produits/{id}`, `DELETE /produits/{id}`
-- [ ] Actuator exposed: `management.endpoints.web.exposure.include=*` and
+- [x] Actuator exposed: `management.endpoints.web.exposure.include=*` and
       `management.endpoint.health.show-details=always`
-- [ ] Three instances on 8080 / 8081 / 8082
+- [x] Three instances ready on 8080 / 8081 / 8082 (via `--server.port=...`)
 
 **DoD:** `http://localhost:8080/produits` returns the 3 seeded products;
 `/actuator/health` returns `UP`; a POST then GET round-trip works.
