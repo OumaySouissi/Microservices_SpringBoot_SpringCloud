@@ -49,15 +49,15 @@ Reference: PDF "Microservice ProductService".
 
 Reference: PDF "Microservice ConfigService".
 
-- [ ] Generate `config-service` with Web + Config Server, `@EnableConfigServer`
-- [ ] `server.port=8888`
-- [ ] `myConfig/` directory used as config source
+- [x] Generate `config-service` with Web + Config Server, `@EnableConfigServer`
+- [x] `server.port=8888`
+- [x] `myConfig/` directory used as config source
       (`native` profile, or `git` with `file:` URI + `git init`/commit inside)
-- [ ] `myConfig/application.properties` → `vglobale=xxxxx`
-- [ ] `myConfig/product-service.properties` → `sujet=tp.microservice@isetjb.rnu.tn`
-- [ ] `product-service`: `spring.application.name=product-service`,
+- [x] `myConfig/application.properties` → `vglobale=xxxxx`
+- [x] `myConfig/product-service.properties` → `sujet=tp.microservice@isetjb.rnu.tn`
+- [x] `product-service`: `spring.application.name=product-service`,
       `spring.config.import=optional:configserver:http://localhost:8888`
-- [ ] `product-service` exposes `GET /messages` returning its `server.port`,
+- [x] `product-service` exposes `GET /messages` returning its `server.port`,
       `sujet` and `vglobale`
 
 **DoD:** `http://localhost:8888/product-service/master` returns the merged
