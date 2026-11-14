@@ -13,10 +13,10 @@ Legend: `[ ]` todo
 
 ## Phase 0 - Environment + repo hygiene
 
-- [ ] JDK 21 (LTS) installed, `JAVA_HOME` set, `java -version` = 21
-- [ ] Spring Boot / Spring Cloud versions pinned once (3.5.x + 2025.0.x)
-- [ ] Repo cloned, `.gitignore` in place, first commit pushed
-- [ ] Project generation method decided (start.spring.io + wrappers, or STS wizard)
+- [x] JDK 24 installed (compatible with Boot 3.5.x), `JAVA_HOME` set, `java -version` = 24
+- [x] Spring Boot / Spring Cloud versions pinned once (3.5.16 + 2025.0.3)
+- [x] Repo cloned, `.gitignore` in place, first commit pushed
+- [x] Project generation method decided: multi-module parent POM + Maven wrapper
 
 **DoD:** `java -version` OK, `./mvnw -v` OK, repo clean and pushed.
 
