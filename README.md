@@ -1,18 +1,21 @@
 # TP3 - Microservices avec Spring Boot et Spring Cloud
 
 Implementation of the ISETJB SOA lab (TP3): four independently deployable
-Spring Boot services that talk to each other through Spring Cloud
-(configuration, discovery, routing / load balancing).
+Spring Boot services communicating through Spring Cloud (configuration, discovery, routing / load balancing).
 
-> **Status:** scaffolding only - no service code has been written yet.
-> See [ROADMAP.md](ROADMAP.md) for the plan and
-> [docs/environment-setup.md](docs/environment-setup.md) for the toolchain.
+> **Status:** **Completed & Verified** (Phases 0 to 6 completed).  
+> Detailed architecture, screenshots, and demonstration logs are available in [docs/report.md](docs/report.md).  
+> Tracking roadmap: [ROADMAP.md](ROADMAP.md).
 
-## Target architecture
+---
 
-```
+## Architecture
+
+![Architecture Diagram](docs/architecture-diagram.svg)
+
+```text
                         +---------------------+
-   browser / client --> |   Proxy Service     |   :9999
+   Browser / Client --> |   Proxy Service     |   :9999
                         |  Spring Cloud       |
                         |  Gateway + LB       |
                         +----------+----------+
@@ -37,48 +40,55 @@ Spring Boot services that talk to each other through Spring Cloud
                         +---------------------+     properties from here
 ```
 
-## Services
+---
 
-| Service            | Port(s)           | Spring stack                                                        | Role                                                                 |
-| ------------------ | ----------------- | ------------------------------------------------------------------- | -------------------------------------------------------------------- |
-| `config-service`   | 8888              | Web + Config Server (`@EnableConfigServer`)                          | Centralised configuration (`myConfig/`), shared + per-service files   |
-| `discovery-service`| 8761              | Eureka Server + Config Client                                       | Service registry, no self-registration                                |
-| `product-service`  | 8080, 8081, 8082  | Web, Data JPA, H2, Actuator, Eureka Discovery, Config Client         | Business API: `/produits` (CRUD), `/messages` (which instance answered) |
-| `proxy-service`    | 9999              | Gateway (reactive), LoadBalancer, Actuator, Eureka, Config Client    | Single entry point, `lb://` routing + round-robin over instances      |
+## Services & Tech Stack
 
-## Repository layout (planned)
+| Service | Port(s) | Spring Stack | Role |
+| :--- | :--- | :--- | :--- |
+| **`config-service`** | `8888` | Spring Cloud Config Server (`native` profile) | Centralized configuration source (`myConfig/` directory) |
+| **`discovery-service`**| `8761` | Netflix Eureka Server | Dynamic service registry |
+| **`product-service`** | `8080`, `8081`, `8082` | Spring Web, Spring Data JPA, H2, Actuator, Eureka Discovery, Config Client | CRUD API (`/produits`), H2 DB, `/messages` endpoint |
+| **`proxy-service`** | `9999` | Spring Cloud Gateway (Reactive WebFlux), LoadBalancer, Eureka Client | API Gateway, route `/product-service/**` to `lb://product-service` with `StripPrefix=1` |
 
+---
+
+## How to Build and Run
+
+### 1. Build All Modules
+From the repository root:
+```bash
+./mvnw clean package -DskipTests
 ```
-tp3-soa-microservices/
-├─ config-service/
-│  └─ src/main/resources/myConfig/        # the "config git repo"
-│     ├─ application.properties           # vglobale=...
-│     ├─ product-service.properties       # sujet=...
-│     ├─ discovery-service.properties     # server.port=8761, no self-register
-│     └─ proxy-service.properties         # server.port=9999
-├─ discovery-service/
-├─ product-service/
-├─ proxy-service/
-├─ docs/
-│  └─ environment-setup.md
-├─ ROADMAP.md
-└─ README.md
+*(On Windows: `.\mvnw.cmd clean package -DskipTests`)*
+
+### 2. Execution Order
+Start each service in a separate terminal:
+
+```bash
+# 1. Config Service (port 8888)
+java -jar config-service/target/config-service-1.0.0-SNAPSHOT.jar
+
+# 2. Discovery Service (port 8761)
+java -jar discovery-service/target/discovery-service-1.0.0-SNAPSHOT.jar
+
+# 3. Product Service Instances (8080, 8081, 8082)
+java -jar product-service/target/product-service-1.0.0-SNAPSHOT.jar --server.port=8080
+java -jar product-service/target/product-service-1.0.0-SNAPSHOT.jar --server.port=8081
+java -jar product-service/target/product-service-1.0.0-SNAPSHOT.jar --server.port=8082
+
+# 4. Proxy Service / Gateway (port 9999)
+java -jar proxy-service/target/proxy-service-1.0.0-SNAPSHOT.jar
 ```
 
-Each service stays an **independent Maven project** (own `pom.xml`, own
-`mvnw`) so it can be built, versioned and deployed on its own, as required by
-the microservice approach. A parent aggregator `pom.xml` is optional later.
+---
 
-## Run order (once implemented)
+## Demonstration URLs
 
-1. `config-service` (8888) - everything else imports its config.
-2. `discovery-service` (8761).
-3. `product-service` x3 (8080, 8081, 8082).
-4. `proxy-service` (9999).
-
-Acceptance URLs:
-
-- `http://localhost:8888/product-service/master` → JSON with `vglobale` + `sujet`
-- `http://localhost:8761` → 3 `PRODUCT-SERVICE` instances, 1 `PROXY-SERVICE`
-- `http://localhost:8080/produits` → Pencil / Book / Eraser
-- `http://localhost:9999/product-service/messages` → port rotates 8080 / 8081 / 8082
+- **Eureka Registry Web Dashboard:** [http://localhost:8761](http://localhost:8761)
+- **Config Server Endpoint:** [http://localhost:8888/product-service/master](http://localhost:8888/product-service/master)
+- **Direct Product Service (CRUD):** [http://localhost:8080/produits](http://localhost:8080/produits)
+- **H2 Web Console:** [http://localhost:8080/h2-console](http://localhost:8080/h2-console) (JDBC URL: `jdbc:h2:mem:testdb`, User: `sa`, blank password)
+- **Gateway Load-Balanced Messages (Round-Robin):** [http://localhost:9999/product-service/messages](http://localhost:9999/product-service/messages)
+- **Gateway Load-Balanced Products:** [http://localhost:9999/product-service/produits](http://localhost:9999/product-service/produits)
+- **Actuator Health & Metrics:** [http://localhost:8080/actuator/health](http://localhost:8080/actuator/health), [http://localhost:8080/actuator/metrics](http://localhost:8080/actuator/metrics)
