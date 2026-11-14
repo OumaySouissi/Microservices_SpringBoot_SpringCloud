@@ -106,8 +106,8 @@ proxy too.
 
 ## Phase 5 - Robustness / demo quality
 
-- [ ] Stop one instance → traffic only goes to the two remaining ones
-- [ ] Add `spring.cloud.loadbalancer.` caching notes / `eureka.client.registry-fetch-interval-seconds`
+- [x] Stop one instance → traffic only goes to the two remaining ones
+- [x] Add `spring.cloud.loadbalancer.` caching notes / `eureka.client.registry-fetch-interval-seconds`
       explanation in the report
 - [ ] Optional: H2 console off in "prod" profile, log level per service
 - [ ] Optional: `docker-compose` starting config → discovery → 3 products → proxy
@@ -120,8 +120,8 @@ sequence, and the demo scenario in the README works.
 
 ## Phase 6 - Report / defence
 
-- [ ] Architecture diagram (draw.io or Excalidraw), exported in `docs/`
-- [ ] Screenshots: Eureka dashboard, `/messages` x3, proxy round-robin,
+- [x] Architecture diagram (draw.io or Excalidraw), exported in `docs/`
+- [x] Screenshots: Eureka dashboard, `/messages` x3, proxy round-robin,
       config server JSON
 - [ ] Explain *why* each Spring Cloud brick exists (config, discovery, gateway,
       client-side LB) - the lab is graded on the reasoning, not on the code
