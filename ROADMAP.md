@@ -73,13 +73,13 @@ Note: config is read at startup only - restart instances after editing
 
 Reference: PDF "Microservice DiscoveryService".
 
-- [ ] Generate `discovery-service` with Eureka Server + Config Client
+- [x] Generate `discovery-service` with Eureka Server + Config Client
       (`@EnableEurekaServer`)
-- [ ] `myConfig/discovery-service.properties`:
+- [x] `myConfig/discovery-service.properties`:
       `server.port=8761`, `eureka.client.fetch-registry=false`,
       `eureka.client.register-with-eureka=false`
-- [ ] `product-service`: `@EnableDiscoveryClient`
-- [ ] Give each instance a unique id:
+- [x] `product-service`: `@EnableDiscoveryClient`
+- [x] Give each instance a unique id:
       `eureka.instance.instance-id=${spring.application.name}:${server.port}`
 
 **DoD:** `http://localhost:8761` lists `PRODUCT-SERVICE` with 3 instances on
@@ -91,12 +91,12 @@ Reference: PDF "Microservice DiscoveryService".
 
 Reference: PDF "Microservice ProxyService".
 
-- [ ] Generate `proxy-service`: **Gateway (reactive)**, LoadBalancer, Actuator,
+- [x] Generate `proxy-service`: **Gateway (reactive)**, LoadBalancer, Actuator,
       Eureka Discovery, Config Client
       (no `spring-boot-starter-web` in this one - it is WebFlux)
-- [ ] `myConfig/proxy-service.properties` → `server.port=9999`
-- [ ] Route: `/product-service/**` → `lb://product-service`, `StripPrefix=1`
-- [ ] Verify the proxy itself is registered in Eureka
+- [x] `myConfig/proxy-service.properties` → `server.port=9999`
+- [x] Route: `/product-service/**` → `lb://product-service`, `StripPrefix=1`
+- [x] Verify the proxy itself is registered in Eureka
 
 **DoD:** hitting `http://localhost:9999/product-service/messages` 6 times
 shows the 3 ports alternating; `/product-service/produits` works through the

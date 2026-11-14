@@ -3,11 +3,13 @@ package tn.rnu.isetjb.productservice;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import tn.rnu.isetjb.productservice.entities.Product;
 import tn.rnu.isetjb.productservice.repositories.ProductRepository;
 
 @SpringBootApplication
+@EnableDiscoveryClient
 public class ProductServiceApplication {
 
     public static void main(String[] args) {
